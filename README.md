@@ -2,22 +2,20 @@ Callisto Network Stats
 ============
 [![Build Status][travis-image]][travis-url] [![dependency status][dep-image]][dep-url]
 
-This is a visual interface for tracking callisto network status. It uses WebSockets to receive stats from running nodes and output them through an angular interface. It is the front-end implementation for [multi-geth](https://github.com/ethereumsocial/multi-geth).
+This is a visual interface for tracking Callisto Network status. It uses WebSockets to receive stats from running nodes and output them through an angular interface. It is the front-end implementation for [go-callisto](https://github.com/EthereumCommonwealth/go-callisto).
 
 ![Screenshot](https://raw.githubusercontent.com/cubedro/eth-netstats/master/src/images/screenshot.jpg?v=0.0.6 "Screenshot")
 
-## How to list my nodes on [clostats.net](https://clostats.net) ?
+## How to list my nodes on [stats.callisto.network](https://stats.callisto.network/) ?
 
-You can use [multi-geth](https://github.com/ethereumsocial/multi-geth) or [etsc-net-intelligence-api](https://github.com/ethereumsocial/etsc-net-intelligence-api) for connecting to netstats server.
-
-Using multi-geth
+Using go-callisto
 
 Add --ethstats option behind the start command
 
 example)
 
 ```bash
-geth --callisto --ethstats "<your-nickname>:Callisto@clostats.net"
+geth --ethstats "<your-nickname>:Callisto@clostats.net"
 ```
 
 ## Prerequisite
@@ -32,7 +30,7 @@ Make sure you have node.js and npm installed.
 Clone the repository and install the dependencies
 
 ```bash
-git clone https://github.com/chainkorea/clo-netstats
+git clone https://github.com/EthereumCommonwealth/clo-netstats
 cd clo-netstats
 npm install
 sudo npm install -g grunt-cli
@@ -62,6 +60,10 @@ grunt all
 
 ```bash
 npm start
+```
+If you want some sweet auto build and livereload run
+```bash
+grunt watch
 ```
 
 ## Run in PM2 - daemon mode.
@@ -99,8 +101,3 @@ pm2 save
 ```
 
 see the interface at http://localhost:3000
-
-[travis-image]: https://travis-ci.org/chainkorea/clo-netstats.svg
-[travis-url]: https://travis-ci.org/chainkorea/clo-netstats
-[dep-image]: https://david-dm.org/chainkorea/clo-netstats.svg
-[dep-url]: https://david-dm.org/chainkorea/clo-netstats

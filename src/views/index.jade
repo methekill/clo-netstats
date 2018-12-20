@@ -2,162 +2,168 @@
 extends ./layout.jade
 
 block content
-  div.container-fluid(ng-controller='StatsCtrl')
-    div.row(ng-cloak)
-      div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder
-        div.big-info.bestblock.text-info
-          div.pull-left.icon-full-width
-            i.icon-block
-          div.big-details-holder
-            span.small-title best block
-            span.big-details {{'#'}}{{ bestBlock | number}}
-          div.clearfix
-      div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder
-        div.big-info.uncleCount.text-info
-          div.pull-left.icon-full-width
-            i.icon-uncle
-          div.big-details-holder
-            span.small-title uncles&nbsp;
-              span.small.hidden-xs (current / last 50)
-            span.big-details {{ bestStats.block.uncles.length }}/{{ uncleCount }}
-          div.clearfix
-      div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder
-        div.big-info.blocktime(class="{{ lastBlock | timeClass : true }}")
-          div.pull-left.icon-full-width
-            i.icon-time
-          div.big-details-holder
-            span.small-title last block
-            span.big-details {{ lastBlock | blockTimeFilter }}
-            //- span.big-details(time-ago="lastBlock")
-          div.clearfix
-      div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder
-        div.big-info.avgblocktime(class="{{ avgBlockTime | avgTimeClass }}")
-          div.pull-left.icon-full-width
-            i.icon-gas
-          div.big-details-holder
-            span.small-title avg block time
-            span.big-details {{ avgBlockTime | avgTimeFilter }}
-          div.clearfix
-      div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder
-        div.big-info.difficulty.text-orange
-          div.pull-left.icon-full-width
-            i.icon-hashrate
-          div.big-details-holder
-            span.small-title
-              span.hidden-xs avg&nbsp;
-              | network hash
-              span.hidden-xs rate
-            span.big-details(ng-bind-html="avgHashrate | networkHashrateFilter")
-          div.clearfix
-      div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder
-        div.big-info.difficulty.text-danger
-          div.pull-left.icon-full-width
-            i.icon-difficulty
-          div.big-details-holder
+  header.Header
+    .Header-content
+      a(href='/')
+        figure.Header-figure
+          img.Header-logo-desktop(src='https://callisto.network/image/callisto_logo_c.svg', alt='Callisto Logo')
+          img.Header-logo-mobile(src='https://callisto.network/image/mini-logo.svg', alt='Callisto Logo')
+      nav.Header-menu
+        a.Header-menu-mobile
+          i.fas.fa-bars.Header-menu-mobile-icon
+        ul.Header-menu-content
+          li
+            a.Header-menu-content-target(href='https://callisto.network/#roadmap') Roadmap
+          li
+            a.Header-menu-content-target(href='https://callisto.network/airdrop/') Airdrop
+          li
+            a.Header-menu-content-target(href='https://callisto.network/#wallets') Wallets
+          li
+            a.Header-menu-content-target(href='https://callisto.network/#exchanges') Exchanges
+          li
+            a.Header-menu-content-target(href='https://callisto.network/#mining') Mining
+          li
+            a.Header-menu-content-target(href='https://callisto.network/cold-staking/') Cold Staking
+          li
+            a.Header-menu-content-target(href='https://callisto.network/smart-contract-audit/') Audit
+          li
+            a.Header-menu-content-target(href='https://callisto.network/#team') Team
+          li
+            a.Header-menu-content-target(href='/blog/') Blog
+  div.main-container(ng-controller='StatsCtrl')
+    div.container-grid
+        div.stat-holder
+          span.small-title best block
+          div.stat-row.bestblock
+            i.icon-custom-cube
+            span.text-success {{'#'}}{{ bestBlock | number}}
+        div.stat-holder
+          span.small-title uncles&nbsp;
+          span.small-title (current / last 50)
+          div.stat-row.uncleCount
+            i.icon-custom-uncles
+            span.text-success {{ bestStats.block.uncles.length }}/{{ uncleCount }}
+        div.stat-holder
+          span.small-title last block
+          div.stat-row.blocktime(class="{{ lastBlock | timeClass : true }}")
+            i.icon-custom-timer
+            span.text-orange {{ lastBlock | blockTimeFilter }}
+        div.stat-holder
+          span.small-title avg block time
+          div.stat-row.avgblocktime(class="{{ avgBlockTime | avgTimeClass }}")
+            i.icon-custom-clock
+              span.path1
+              span.path2
+              span.path3
+            span.text-success {{ avgBlockTime | avgTimeFilter }}
+        div.stat-holder
+          span.small-title avg&nbsp network hash rate
+          div.stat-row.difficulty
+            i.icon-custom-fire
+            span.text-orange(ng-bind-html="avgHashrate | networkHashrateFilter")
+        div.stat-holder
+          span.small-title difficulty
+          div.stat-row.difficulty
+            i.icon-custom-piece
+            span.text-danger {{ lastDifficulty | totalDifficultyFilter }}
+
+    div.container-grid(ng-cloak)
+        div.stat-holder-small
+          div.active-nodes(class="{{ nodesActive | nodesActiveClass : nodesTotal }}")
+            i.icon-custom-node-green.text-success
+              span.path1
+              span.path2
+              span.path3
+              span.path4
+            span.small-title active nodes
+            span.small-value.text-success {{nodesActive}}/{{nodesTotal}}
+        div.stat-holder-small
+          div.gasprice.text-info
+            i.icon-custom-pricetag-green.text-success
+            span.small-title gas price
+            span.small-value {{ bestStats.gasPrice.toString() | gasPriceFilter }}
+        div.stat-holder-small
+          div.gasprice.text-info
+            i.icon-custom-pricetag-green.text-success
+            span.small-title gas limit
+            span.small-value {{ bestStats.block.gasLimit }} gas
+        div.stat-holder-small
+          div.page-latency(class="{{ {active: true, latency: latency} | latencyClass }}")
+            i.icon-custom-fullclock-green.text-success
+            span.small-title page latency
+            span.small-value {{latency}} ms
+        div.stat-holder-small
+          div.uptime(class="{{ upTimeTotal | upTimeClass : true }}")
+            i.icon-custom-buld-green.text-success
+            span.small-title uptime
+            span.small-value.text-success {{ upTimeTotal | upTimeFilter }}
+
+    div.container-grid.dense-grid(ng-cloak)
+        div.col-xs-6.col-sm-4.col-md-3.stat-holder-graph
+          div.big-info.chart(class="{{ avgBlockTime | avgTimeClass }}")
+            //- i.icon-time
+            span.small-title block time
+            //- span.small-value {{ avgBlockTime | avgTimeFilter }}
+            sparkchart.big-details.spark-blocktimes(data="{{lastBlocksTime.join(',')}}", tooltipsuffix="s")
+
+        div.col-xs-6.col-sm-4.col-md-3.stat-holder-graph
+          div.big-info.chart.text-info
+            //- i.icon-difficulty
             span.small-title difficulty
-            span.big-details
-              span.small-hash {{ lastDifficulty | totalDifficultyFilter }}
-          div.clearfix
+            //- span.small-value {{ lastDifficulty | number }}
+            sparkchart.big-details.spark-difficulty(data="{{difficultyChart.join(',')}}")
 
-      div.clearfix
+        div.col-xs-6.col-sm-4.col-md-3.stat-holder-graph.xpull-right
+          div.big-info.chart.xdouble-chart(class="{{ blockPropagationAvg | propagationAvgTimeClass : true }}")
+            //- i.icon-gas
+            span.small-title block propagation
+            //- span.small-value {{ blockPropagationAvg | blockPropagationFilter : '' }}
+            histogram.big-details.d3-blockpropagation(data="blockPropagationChart")
 
+        div.col-xs-6.col-sm-4.col-md-3.stat-holder-graph.xpull-right
+          div.big-info.chart.xdouble-chart
+            span.small-title last blocks miners
+            div.blocks-holder(ng-repeat='miner in miners track by miner.miner', data-toggle="tooltip", data-placement="right", data-original-title="{{miner.blocks}}")
+              //- div.small-title-miner {{miner.miner | minerNameFilter : miner.name}}
+              div.small-title-miner {{miner.miner}}
+              div.block-count(class="{{miner.blocks | minerBlocksClass : 'text-'}}") {{miner.blocks}}
+              minerblock(blocks="{{miner.blocks}}")
+              div.clearfix
 
-    div.row(ng-cloak)
-      div.col-xs-12.stats-boxes(style="padding-top: 0px;")
-        div.row.second-row
-          div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder.box
-            div.active-nodes(class="{{ nodesActive | nodesActiveClass : nodesTotal }}")
-              i.icon-node
-              span.small-title active nodes
-              span.small-value {{nodesActive}}/{{nodesTotal}}
-          div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder.box
-            div.gasprice.text-info
-              i.icon-gasprice
-              span.small-title gas price
-              span.small-value {{ bestStats.gasPrice.toString() | gasPriceFilter }}
-          div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder.box
-            div.gasprice.text-info
-              i.icon-gasprice
-              span.small-title gas limit
-              span.small-value {{ bestStats.block.gasLimit }} gas
-          div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder.box
-            div.page-latency(class="{{ {active: true, latency: latency} | latencyClass }}")
-              i.icon-clock
-              span.small-title page latency
-              span.small-value {{latency}} ms
-          div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder.box
-            div.uptime(class="{{ upTimeTotal | upTimeClass : true }}")
-              i.icon-bulb
-              span.small-title uptime
-              span.small-value {{ upTimeTotal | upTimeFilter }}
-          div.col-xs-6.col-sm-6.col-md-6.col-lg-2.stat-holder.box
+        div.col-xs-6.col-sm-4.col-md-3.stat-holder-graph
+          div.big-info.chart.text-info
+            //- i.icon-uncle
+            span.small-title uncle count&nbsp;
+              span.small.hidden-xs (25 blocks per bar)
+            //- span.small-value {{ bestStats.block.uncles.length }}/{{ uncleCount }}
+            sparkchart.big-details.spark-uncles(data="{{uncleCountChart.join(',')}}")
 
-        div.row
-          div.col-xs-12.col-sm-12.col-md-12.col-lg-8
-            div.row
-              div.col-xs-6.col-sm-4.col-md-3.stat-holder
-                div.big-info.chart(class="{{ avgBlockTime | avgTimeClass }}")
-                  //- i.icon-time
-                  span.small-title block time
-                  //- span.small-value {{ avgBlockTime | avgTimeFilter }}
-                  sparkchart.big-details.spark-blocktimes(data="{{lastBlocksTime.join(',')}}", tooltipsuffix="s")
+        div.col-xs-6.col-sm-4.col-md-3.stat-holder-graph
+          div.big-info.chart.text-info
+            //- i.icon-uncle
+            span.small-title transactions
+            sparkchart.big-details.spark-transactions(data="{{transactionDensity.join(',')}}")
 
-              div.col-xs-6.col-sm-4.col-md-3.stat-holder
-                div.big-info.chart.text-info
-                  //- i.icon-difficulty
-                  span.small-title difficulty
-                  //- span.small-value {{ lastDifficulty | number }}
-                  sparkchart.big-details.spark-difficulty(data="{{difficultyChart.join(',')}}")
+        div.col-xs-6.col-sm-4.col-md-3.stat-holder-graph
+          div.big-info.chart.text-info
+            //- i.icon-gasprice
+            span.small-title gas spending
+            sparkchart.big-details.spark-gasspending(data="{{gasSpending.join(',')}}")
 
-              div.col-xs-6.col-sm-4.col-md-3.stat-holder.xpull-right
-                div.big-info.chart.xdouble-chart(class="{{ blockPropagationAvg | propagationAvgTimeClass : true }}")
-                  //- i.icon-gas
-                  span.small-title block propagation
-                  //- span.small-value {{ blockPropagationAvg | blockPropagationFilter : '' }}
-                  histogram.big-details.d3-blockpropagation(data="blockPropagationChart")
+        div.col-xs-6.col-sm-4.col-md-3.stat-holder-graph
+          div.big-info.chart.text-info
+            //- i.icon-difficulty
+            span.small-title gas limit
+            //- span.small-value {{ lastDifficulty | number }}
+            sparkchart.big-details.spark-difficulty(data="{{lastGasLimit.join(',')}}")
 
-              div.col-xs-6.col-sm-4.col-md-3.stat-holder.xpull-right
-                div.big-info.chart.xdouble-chart
-                  span.small-title last blocks miners
-                  div.blocks-holder(ng-repeat='miner in miners track by miner.miner', data-toggle="tooltip", data-placement="right", data-original-title="{{miner.blocks}}")
-                    //- div.small-title-miner {{miner.miner | minerNameFilter : miner.name}}
-                    div.small-title-miner {{miner.miner}}
-                    div.block-count(class="{{miner.blocks | minerBlocksClass : 'text-'}}") {{miner.blocks}}
-                    minerblock(blocks="{{miner.blocks}}")
-                    div.clearfix
+        div.col-xs-12.col-sm-12.col-md-12.col-lg-4.map-holder
+          //- div.col-xs-12
+          nodemap#mapHolder(data="map")
 
-              div.col-xs-6.col-sm-4.col-md-3.stat-holder
-                div.big-info.chart.text-info
-                  //- i.icon-uncle
-                  span.small-title uncle count&nbsp;
-                    span.small.hidden-xs (25 blocks per bar)
-                  //- span.small-value {{ bestStats.block.uncles.length }}/{{ uncleCount }}
-                  sparkchart.big-details.spark-uncles(data="{{uncleCountChart.join(',')}}")
-
-              div.col-xs-6.col-sm-4.col-md-3.stat-holder
-                div.big-info.chart.text-info
-                  //- i.icon-uncle
-                  span.small-title transactions
-                  sparkchart.big-details.spark-transactions(data="{{transactionDensity.join(',')}}")
-
-              div.col-xs-6.col-sm-4.col-md-3.stat-holder
-                div.big-info.chart.text-info
-                  //- i.icon-gasprice
-                  span.small-title gas spending
-                  sparkchart.big-details.spark-gasspending(data="{{gasSpending.join(',')}}")
-
-              div.col-xs-6.col-sm-4.col-md-3.stat-holder
-                div.big-info.chart.text-info
-                  //- i.icon-difficulty
-                  span.small-title gas limit
-                  //- span.small-value {{ lastDifficulty | number }}
-                  sparkchart.big-details.spark-difficulty(data="{{lastGasLimit.join(',')}}")
-
-
-
-          div.col-xs-12.col-sm-12.col-md-12.col-lg-4.stat-holder.map-holder
-            //- div.col-xs-12
-            nodemap#mapHolder(data="map")
+    div.banner
+      h4 ATTENTION!
+      h5 This page does not represent the entire state of the Callisto network - listing a node on this page is a voluntary process.
 
     div.row.hidden-xs
       div.col-xs-12.stats-boxes
@@ -166,7 +172,7 @@ block content
           //-  div.active-nodes.text-warning
           //-    i.icon-warning-o
           //-    span.small-title ATTENTION!
-          //-    span.small-value This page does not represent the entire state of the ethereum network - listing a node on this page is a voluntary process.
+          //-    span.small-value This page does not represent the entire state of the Callisto network - listing a node on this page is a voluntary process.
           //- div.col-xs-12.stat-holder.box
           //-   div.active-nodes.text-danger
           //-     i.icon-hashrate
@@ -177,42 +183,52 @@ block content
 
       //- div.clearfix
 
-    div.row(ng-cloak, style="padding-top: 10px")
-      table.table.table-striped
+    div.row.table-container(ng-cloak, style="padding-top: 10px")
+      table.table
         thead
           tr.text-info
             th.th-nodecheck
-              i.icon-check-o(data-toggle="tooltip", data-placement="top", title="Pin nodes to display first", ng-click="orderTable(['-stats.block.number', 'stats.block.propagation'], false)")
+              i.icon-custom-check-green(data-toggle="tooltip", data-placement="top", title="Pin nodes to display first", ng-click="orderTable(['-stats.block.number', 'stats.block.propagation'], false)")
+                span.path1
+                span.path2
             th.th-nodename
-              i.icon-node(data-toggle="tooltip", data-placement="top", title="Node name", ng-click="orderTable(['info.name'], false)")
+              i.icon-custom-node-green(data-toggle="tooltip", data-placement="top", title="Node name", ng-click="orderTable(['info.name'], false)")
             th.th-nodetype.hidden-xs
-              i.icon-laptop(data-toggle="tooltip", data-placement="top", title="Node type", ng-click="orderTable(['info.node'], false)")
+              i.icon-custom-computer-green(data-toggle="tooltip", data-placement="top", title="Node type", ng-click="orderTable(['info.node'], false)")
             th.th-latency.hidden-xs
-              i.icon-clock(data-toggle="tooltip", data-placement="top", title="Node latency", ng-click="orderTable(['stats.latency'], false)")
+              i.icon-custom-fullclock-green(data-toggle="tooltip", data-placement="top", title="Node latency", ng-click="orderTable(['stats.latency'], false)")
             th.hidden-xs
               i.icon-mining(data-toggle="tooltip", data-placement="top", title="Is mining", ng-click="orderTable(['-stats.hashrate'], false)")
             th
               i.icon-group(data-toggle="tooltip", data-placement="top", title="Peers", ng-click="orderTable(['-stats.peers'], false)")
             th
-              i.icon-network(data-toggle="tooltip", data-placement="top", title="Pending transactions", ng-click="orderTable(['-stats.pending'], false)")
+              i.icon-custom-planet-green(data-toggle="tooltip", data-placement="top", title="Pending transactions", ng-click="orderTable(['-stats.pending'], false)")
             th.hidden-xs
-              i.icon-block(data-toggle="tooltip", data-placement="top", title="Last block", ng-click="orderTable(['-stats.block.number', 'stats.block.propagation'], false)")
+              i.icon-custom-cube-green(data-toggle="tooltip", data-placement="top", title="Last block", ng-click="orderTable(['-stats.block.number', 'stats.block.propagation'], false)")
             th.th-blockhash.hidden-xs.hidden-sm.hidden-md &nbsp;
             th.th-blockhash.hidden-xs.hidden-sm.hidden-md
-              i.icon-difficulty(data-toggle="tooltip", data-placement="top", title="Total difficulty", ng-click="orderTable(['-stats.block.totalDifficulty'], false)")
+              i.icon-custom-piece-green(data-toggle="tooltip", data-placement="top", title="Total difficulty", ng-click="orderTable(['-stats.block.totalDifficulty'], false)")
             th.hidden-xs
-              i.icon-check-o(data-toggle="tooltip", data-placement="top", title="Block transactions", ng-click="orderTable(['-stats.block.transactions.length'], false)")
+              i.icon-custom-check-green(data-toggle="tooltip", data-placement="top", title="Block transactions", ng-click="orderTable(['-stats.block.transactions.length'], false)")
+                span.path1
+                span.path2
             th.hidden-xs
-              i.icon-uncle(data-toggle="tooltip", data-placement="top", title="Uncles", ng-click="orderTable(['-stats.block.uncles.length'], false)")
+              i.icon-custom-uncles-green(data-toggle="tooltip", data-placement="top", title="Uncles", ng-click="orderTable(['-stats.block.uncles.length'], false)")
             th.th-blocktime
-              i.icon-time(data-toggle="tooltip", data-placement="top", title="Last block time", ng-click="orderTable(['-stats.block.received'], false)")
+              i.icon-custom-timer-green(data-toggle="tooltip", data-placement="top", title="Last block time", ng-click="orderTable(['-stats.block.received'], false)")
             th.th-peerPropagationTime
-              i.icon-gas(data-toggle="tooltip", data-placement="top", title="Propagation time", ng-click="orderTable(['-stats.block.number', 'stats.block.propagation'], false)")
+              i.icon-custom-clock-green(data-toggle="tooltip", data-placement="top", title="Propagation time", ng-click="orderTable(['-stats.block.number', 'stats.block.propagation'], false)")
+                span.path1
+                span.path2
+                span.path3
             th.th-peerPropagationChart
             th.th-peerPropagationAvg.hidden-xs
-              i.icon-gas(data-toggle="tooltip", data-placement="top", title="Average propagation time", ng-click="orderTable(['stats.propagationAvg'], false)")
+              i.icon-custom-clock-green(data-toggle="tooltip", data-placement="top", title="Average propagation time", ng-click="orderTable(['stats.propagationAvg'], false)")
+                span.path1
+                span.path2
+                span.path3
             th
-              i.icon-bulb(data-toggle="tooltip", data-placement="top", title="Up-time", ng-click="orderTable(['-stats.uptime'], false)")
+              i.icon-custom-buld-green(data-toggle="tooltip", data-placement="top", title="Up-time", ng-click="orderTable(['-stats.uptime'], false)")
         tbody(ng-cloak)
           tr(ng-repeat='node in nodes | orderBy:predicate track by node.id', class="{{ node.stats | mainClass : bestBlock }}", id="node_{{node.id}}")
             td.td-nodecheck
@@ -247,3 +263,34 @@ block content
               nodepropagchart(data="{{node.history.join(',')}}")
             td(class="{{ node.stats | propagationNodeAvgTimeClass : bestBlock }}").hidden-xs {{ node.stats | blockPropagationAvgFilter : bestBlock }}
             td(class="{{ node.stats.uptime | upTimeClass : node.stats.active }}") {{ node.stats.uptime | upTimeFilter }}
+
+  footer.Footer
+    .Footer-top.container
+      figure.Footer-figure
+        img.Footer-logo(src='https://callisto.network/image/callisto_logo_c.svg', alt='Callisto Logo')
+      .Footer-top-list
+        span.Footer-top-list-title
+          span Callisto Network Ecosystem
+        a.Footer-top-list-element(href='https://callisto.network/#wallets') Wallets
+        a.Footer-top-list-element(href='https://callisto.network/#pool') Pools
+        a.Footer-top-list-element(href='https://callisto.network/#pool') Block Explorers
+        a.Footer-top-list-element(href='https://callisto.network/#exchanges') Exchanges
+        a.Footer-top-list-element(href='https://checker.callisto.network', target='_blank') Official Checker
+      .Footer-top-list
+        span.Footer-top-list-title
+          span Community and Help
+        a.Footer-top-list-element(href='https://callisto.network/community-guidlines/') Community Guidelines
+        a.Footer-top-list-element(href='https://callisto.network/blog/') Blog
+        a.Footer-top-list-element(href='https://callisto.network/faq/', target='_blank') Callisto FAQ
+      .Footer-top-list
+        span.Footer-top-list-title Callisto
+        a.Footer-top-list-element(href='https://callisto.network/#about') About
+        a.Footer-top-list-element(href='https://callisto.network/airdrop/') Airdrop
+        a.Footer-top-list-element(href='https://callisto.network/#team') Our Team
+        a.Footer-top-list-element(href='https://callisto.network/financial-report/') Financial report
+        a.Footer-top-list-element(href='https://affiliate.callisto.network/', target='_blank') Affiliate Program
+    .Footer-bottom
+      .Footer-bottom-content.container
+        .Footer-bottom-content-copy
+          span
+            span © 2017—2018 Callisto Network
